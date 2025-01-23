@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@xata.io/client": "0.21.6",
+    "better-sqlite3": "^11.8.0",
     "date-fns": "2.29.3",
     "discord.js": "14.7.1",
     "dotenv": "16.0.3"
