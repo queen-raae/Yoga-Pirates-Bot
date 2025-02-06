@@ -6,6 +6,7 @@ import {
   GatewayIntentBits,
   REST,
   Routes,
+  Partials,
 } from "discord.js";
 
 import { DISCORD_CLIENT_ID, DISCORD_CLIENT_TOKEN } from "./config.js";
@@ -22,7 +23,9 @@ const discordClient = new Client({
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.GuildMessageReactions,
   ],
+  partials: [Partials.Message, Partials.Reaction, Partials.User],
 });
 
 const commands = [yogalog, settings, backup];

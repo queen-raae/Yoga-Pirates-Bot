@@ -57,7 +57,7 @@ async function daysOfYoga(discordUserId, sessionDateString) {
 }
 
 function allowedMessage(message) {
-  const isNotBot = !message.author.bot;
+  const isNotBot = !message.author?.bot;
   const channel = message.channel?.name?.toLowerCase();
   const startsWithCheckMark = message.content.trim().startsWith("✅");
 
@@ -165,20 +165,46 @@ async function deleteSession(message) {
   console.log(">>>>>>> Deleted record", result.lastInsertRowid);
 }
 
+async function handlePartial(message, callback) {
+  if (message.partial) {
+    try {
+      const fullMessage = await message.fetch();
+      callback(fullMessage);
+    } catch (error) {
+      console.error("Something went wrong when fetching the message:", error);
+      return;
+    }
+  } else {
+    callback(message);
+  }
+}
+
 export default (discordClient) => {
   discordClient.on(Events.MessageCreate, (message) => {
     console.log(">>>>> YogaLogger", Events.MessageCreate);
-    createOrUpdateSession(message);
+    handlePartial(message, createOrUpdateSession);
   });
 
-  discordClient.on(Events.MessageUpdate, (_message, updated) => {
+  discordClient.on(Events.MessageUpdate, (message, updated) => {
     console.log(">>>>> YogaLogger", Events.MessageUpdate);
-    createOrUpdateSession(updated);
+    handlePartial(message, createOrUpdateSession);
   });
 
   discordClient.on(Events.MessageDelete, (message) => {
     console.log(">>>>> YogaLogger", Events.MessageDelete);
-    deleteSession(message);
+    handlePartial(message, deleteSession);
+  });
+
+  discordClient.on(Events.MessageReactionAdd, async (reaction) => {
+    console.log(">>>>> YogaLogger", Events.MessageReactionAdd);
+
+    handlePartial(reaction.message, createOrUpdateSession);
+  });
+
+  discordClient.on(Events.MessageReactionRemove, async (reaction) => {
+    console.log(">>>>> YogaLogger", Events.MessageReactionRemove);
+
+    handlePartial(reaction.message, createOrUpdateSession);
   });
 
   discordClient.on(Events.InteractionCreate, async (interaction) => {
