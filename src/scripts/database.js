@@ -1,7 +1,6 @@
 import Database from "better-sqlite3";
 import * as dotenv from "dotenv";
 dotenv.config();
-import { getXataClient } from "../xata.js";
 
 export const setupDatabase = async () => {
   const db = new Database(process.env.DATABASE_PATH);
@@ -29,48 +28,5 @@ CREATE TABLE IF NOT EXISTS \`yogis\` (
   console.log("Tables created!");
 };
 
-export const importFromXata = async () => {
-  const xata = getXataClient();
-  const db = new Database(process.env.DATABASE_PATH);
-  const records = await xata.db.session.getAll();
-
-  const insertStatement = db.prepare(`
-  INSERT OR IGNORE INTO session (
-    id,
-    sessionTimestamp,
-    createdTimestamp,
-    discordUserId,
-    note,
-    editedTimestamp,
-    sessionDateString,
-    replyId,
-    exercise
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-`);
-
-  records.forEach((record) => {
-    insertStatement.run(
-      record.id,
-      record.sessionTimestamp.toISOString() || null,
-      record.createdTimestamp.toISOString() || null,
-      record.discordUserId,
-      record.note,
-      record.editedTimestamp?.toISOString() || null,
-      record.sessionDateString,
-      record.replyId,
-      record.exercise
-    );
-  });
-
-  const countStatement = db.prepare(`
-  SELECT COUNT(*) as count
-  FROM session
-`);
-
-  const count = countStatement.get();
-  console.log("Records inserted:", count.count);
-};
-
 // Set up the database
 await setupDatabase();
-await importFromXata();

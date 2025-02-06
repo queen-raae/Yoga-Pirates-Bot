@@ -1,13 +1,13 @@
 # Yoga Pirates Discord.js Bot
 
-A bot to save yoga sessions to [Xata](https://xata.io/?utm_source=github&utm_campaign=yoga+pirates&utm_medium=readme) using Discord messages.
+A bot to save yoga sessions to an sqlite-database using Discord messages.
 
 ## ✅ How to log
 
 Write a log message in the #yoga channel.
 
-- `✅ Center Day 6 - Good session` // Save a record to Xata with date = now and note = "Center Day 6 - Good session"
-- `✅-1 Extra evening Session` // Save a record to Xata with date = now - 24 hours day and note = "Extra evening Session"
+- `✅ Center Day 6 - Good session` // Save a record to the database with date = now and note = "Center Day 6 - Good session"
+- `✅-1 Extra evening Session` // Save a record to database with date = now - 24 hours day and note = "Extra evening Session"
 
 ## 💁‍♀️ How to dev
 

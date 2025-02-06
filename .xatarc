@@ -1,8 +1,0 @@
-{
-  "databaseURL": "https://Yoga-Pirates-mlief7.us-east-1.xata.sh/db/yoga-pirates-log",
-  "codegen": {
-    "output": "src/xata.js",
-    "moduleType": "esm",
-    "declarations": true
-  }
-}
